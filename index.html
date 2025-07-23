@@ -2,46 +2,88 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Web Iklan Vio</title>
+  <title>Iklan Premium Christy</title>
   <style>
-    body {
-      font-family: sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 20px;
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+    body, html {
+      margin: 0; padding: 0;
+      height: 100%;
+      background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxtw6wEfB-ZjKUI12ieDF6qULvdRFYaN4mEL_sT-pRxiAMWEI-TlMXJSM&s=100')
+        center/cover no-repeat;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
     }
-    .btn {
-      display: inline-block;
-      background: #0b72ec;
-      color: white;
-      padding: 15px 25px;
-      border-radius: 10px;
-      margin: 10px;
-      text-decoration: none;
+
+    .overlay h1 {
+      font-size: 3em;
+      font-weight: 600;
+      margin-bottom: 0.2em;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    .overlay p {
       font-size: 1.2em;
-      transition: 0.2s;
+      opacity: 0.9;
+      margin-bottom: 1em;
     }
-    .btn:hover {
-      background: #095ab5;
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
   </style>
 </head>
 <body>
+  <div class="overlay" id="adOverlay">
+    <h1>Angelina “Christy”</h1>
+    <p>Peduli dan berbaik hati, siapa dia?</p>
+    <p><em>Klik di mana saja untuk penawaran spesial!</em></p>
+  </div>
 
-  <h1>Selamat Datang di Web Iklan</h1>
-  <p>Klik tombol di bawah untuk lanjut</p>
+  <script>
+    const adLinks = [
+      "https://www.profitableratecpm.com/yp5s785fv9?key=23fcee97edae2ea57212c118f18420bd",
+      "https://www.profitableratecpm.com/w4n4gkie?key=cece3ce2daf51b4d6e580cfc73d9600e"    
+    ];
 
-  <!-- Direct Link Iklan -->
-  <a class="btn" href="https://www.profitableratecpm.com/yp5s785fv9?key=23fcee97edae2ea57212c118f18420bd" target="_blank">Lanjut 1</a>
-  <a class="btn" href="https://www.profitableratecpm.com/v0k3u0szry?key=9e84795cf04ff9956102454de4f42d32" target="_blank">Lanjut 2</a>
+    function getCookie(n) {
+      let v = `; ${document.cookie}`, parts = v.split(`; ${n}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    }
 
-  <!-- Popunder Script 1 -->
-  <script type='text/javascript' src='//pl27231963.profitableratecpm.com/4b/54/3f/4b543f6089237ae879da52a9fc62e84b.js'></script>
+    function setCookie(n,v,d=1) {
+      const e = new Date();
+      e.setTime(e.getTime() + d*864e5);
+      document.cookie = `${n}=${v}; expires=${e.toUTCString()}; path=/`;
+    }
 
-  <!-- Popunder Script 2 -->
-  <script type='text/javascript' src='//pl27232051.profitableratecpm.com/60/bc/5c/60bc5cb16bf2feeb95432f4f9f473fcb.js'></script>
+    function openAd() {
+      let idx = parseInt(getCookie("adIndex")) || 0;
+      window.open(adLinks[idx], "_blank");
+      setCookie("adIndex", (idx+1) % adLinks.length);
+    }
 
+    document.addEventListener("click", function once() {
+      openAd();
+      document.getElementById('adOverlay').style.display = 'none';
+      document.removeEventListener("click", once);
+    });
+  </script>
 </body>
 </html>
+ 
