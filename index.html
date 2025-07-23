@@ -2,14 +2,14 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Iklan Premium Christy</title>
+  <title>Iklan Popup Christy</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
 
-    body, html {
+    html, body {
       margin: 0; padding: 0;
       height: 100%;
-      background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxtw6wEfB-ZjKUI12ieDF6qULvdRFYaN4mEL_sT-pRxiAMWEI-TlMXJSM&s=100')
+      background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxtw6wEfB-ZjKUI12ieDF6qULvdRFYaN4mEL_sT-pRxiAMWEI-TlMXJSM&s=10')
         center/cover no-repeat;
       font-family: 'Poppins', sans-serif;
       color: #fff;
@@ -25,8 +25,8 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      opacity: 0;
       animation: fadeIn 1s forwards;
+      z-index: 2;
     }
 
     .overlay h1 {
@@ -43,47 +43,71 @@
     }
 
     @keyframes fadeIn {
-      to { opacity: 1; }
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
   </style>
 </head>
 <body>
-  <div class="overlay" id="adOverlay">
-    <h1>Angelina “Christy”</h1>
-    <p>Peduli dan berbaik hati, siapa dia?</p>
-    <p><em>Klik di mana saja untuk penawaran spesial!</em></p>
-  </div>
 
-  <script>
-    const adLinks = [
-      "https://www.profitableratecpm.com/yp5s785fv9?key=23fcee97edae2ea57212c118f18420bd",
-      "https://www.profitableratecpm.com/w4n4gkie?key=cece3ce2daf51b4d6e580cfc73d9600e"    
-    ];
+<div class="overlay" id="adOverlay">
+  <h1>Angelina “Christy”</h1>
+  <p>Peduli dan berbaik hati, siapa dia?</p>
+  <p><em>Klik di mana saja untuk melanjutkan ke penawaran spesial!</em></p>
+</div>
 
-    function getCookie(n) {
-      let v = `; ${document.cookie}`, parts = v.split(`; ${n}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
-      return null;
+<script>
+  // Link iklan bisa ditambah/kurangi bebas
+  const adLinks = [
+    "https://www.profitableratecpm.com/yp5s785fv9?key=23fcee97edae2ea57212c118f18420bd",
+    "https://www.profitableratecpm.com/w4n4gkie?key=cece3ce2daf51b4d6e580cfc73d9600e"
+  ];
+
+  // Cookie helpers
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+  }
+
+  function setCookie(name, value, days = 1) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+  }
+
+  // Fungsi buka popup
+  function openAd() {
+    let index = parseInt(getCookie("adIndex") || "0");
+
+    // Buka link popup
+    if (index < adLinks.length) {
+      window.open(adLinks[index], "_blank");
+      index++;
     }
 
-    function setCookie(n,v,d=1) {
-      const e = new Date();
-      e.setTime(e.getTime() + d*864e5);
-      document.cookie = `${n}=${v}; expires=${e.toUTCString()}; path=/`;
+    // Reset jika lebih dari jumlah link
+    if (index >= adLinks.length) {
+      index = 0;
     }
 
-    function openAd() {
-      let idx = parseInt(getCookie("adIndex")) || 0;
-      window.open(adLinks[idx], "_blank");
-      setCookie("adIndex", (idx+1) % adLinks.length);
-    }
+    setCookie("adIndex", index);
 
-    document.addEventListener("click", function once() {
-      openAd();
-      document.getElementById('adOverlay').style.display = 'none';
-      document.removeEventListener("click", once);
-    });
-  </script>
+    // Sembunyikan overlay setelah klik
+    const overlay = document.getElementById("adOverlay");
+    if (overlay) overlay.style.display = "none";
+  }
+
+  // Periksa apakah overlay harus tampil ulang
+  document.addEventListener("DOMContentLoaded", () => {
+    const overlay = document.getElementById("adOverlay");
+    if (overlay) overlay.style.display = "flex"; // Pastikan overlay muncul setiap kali load
+  });
+
+  // Trigger saat klik di mana pun
+  document.addEventListener("click", function onceClick() {
+    openAd();
+    document.removeEventListener("click", onceClick); // Hanya 1x klik per load
+  });
+</script>
+
 </body>
 </html>
- 
