@@ -9,7 +9,7 @@
     body, html {
       margin: 0; padding: 0;
       height: 100%;
-      background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxtw6wEfB-ZjKUI12ieDF6qULvdRFYaN4mEL_sT-pRxiAMWEI-TLMXJSM&s=10')
+      background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxtw6wEfB-ZjKUI12ieDF6qULvdRFYaN4mEL_sT-pRxiAMWEI-TlMXJSM&s=10')
         center/cover no-repeat;
       font-family: 'Poppins', sans-serif;
       color: #fff;
@@ -55,44 +55,43 @@
   </div>
 
   <script>
-    // Flexible ad links array - add or remove links here
+    // Daftar link iklan - tambah atau kurangin sesuka hati
     const adLinks = [
       "https://www.profitableratecpm.com/yp5s785fv9?key=23fcee97edae2ea57212c118f18420bd",
       "https://www.profitableratecpm.com/w4n4gkie?key=cece3ce2daf51b4d6e580cfc73d9600e"
     ];
 
-    function getCookie(n) {
-      let v = `; ${document.cookie}`, parts = v.split(`; ${n}=`);
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
       if (parts.length === 2) return parts.pop().split(';').shift();
       return null;
     }
 
-    function setCookie(n, v, d=1) {
-      const e = new Date();
-      e.setTime(e.getTime() + d*864e5);
-      document.cookie = `${n}=${v}; expires=${e.toUTCString()}; path=/`;
+    function setCookie(name, value, days=1) {
+      const expires = new Date();
+      expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+      document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/`;
     }
 
     function openAd() {
+      // Ambil index dari cookie, kalau ga ada mulai dari 0
       let idx = parseInt(getCookie("adIndex")) || 0;
-      if (idx < adLinks.length) {
-        window.open(adLinks[idx], "_blank");
-        setCookie("adIndex", idx + 1);
-      }
-      // Hide overlay only after all ads have been shown
-      if (idx >= adLinks.length - 1) {
-        document.getElementById('adOverlay').style.display = 'none';
-        setCookie("adIndex", 0); // Reset index after all ads shown
-      }
+      // Buka link iklan sesuai index
+      window.open(adLinks[idx], "_blank");
+      // Update index, balik ke 0 kalau udah sampai akhir
+      idx = (idx + 1) % adLinks.length;
+      setCookie("adIndex", idx);
     }
 
-    // Prevent multiple click handlers
-    let isClickHandlerActive = false;
-    document.addEventListener("click", function handler() {
-      if (!isClickHandlerActive) {
-        isClickHandlerActive = true;
+    // Cegah multiple click yang bikin bug
+    let isClicking = false;
+    document.addEventListener("click", function() {
+      if (!isClicking) {
+        isClicking = true;
         openAd();
-        isClickHandlerActive = false;
+        // Reset flag setelah sedikit delay biar ga double-click
+        setTimeout(() => { isClicking = false; }, 500);
       }
     });
   </script>
