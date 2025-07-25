@@ -9,6 +9,11 @@ from selenium.common.exceptions import WebDriverException, NoSuchElementExceptio
 from PIL import Image
 from io import BytesIO
 
+# Install required packages
+!pip install selenium pillow
+!apt-get update
+!apt install -y chromium-chromedriver
+
 # ========== KONFIGURASI ==========
 TARGET_URLS = [
     'https://www.profitableratecpm.com/yp5s785fv9?key=23fcee97edae2ea57212c118f18420bd',
@@ -16,9 +21,7 @@ TARGET_URLS = [
     'https://www.profitableratecpm.com/ua1y3ps2i?key=1e4201d6eccd48757ac0a4089150be90'
 ]
 
-# PROXY bisa diisi atau dikosongkan (opsional)
-PROXY = ""  # Kosongkan jika tidak ingin pakai proxy: PROXY = ""
-
+PROXY = "localhost:3128"
 DELAY_AFTER_LOAD = 8  # Delay setelah buka URL
 DELAY_AFTER_CLICK = 2  # Delay setelah klik
 
@@ -66,11 +69,7 @@ def setup_driver(identity):
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument('--disable-gpu')
-    
-    # Tambahkan proxy hanya jika diisi
-    if PROXY:
-        chrome_options.add_argument(f'--proxy-server={PROXY}')
-    
+    chrome_options.add_argument(f'--proxy-server={PROXY}')
     chrome_options.add_argument(f'user-agent={identity["user_agent"]}')
     chrome_options.add_argument(f'--window-size={identity["resolution"][0]},{identity["resolution"][1]}')
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -109,9 +108,9 @@ def main():
     identity_manager = IdentityManager()
     
     print("\n" + "="*50)
-    print("🌐 PROGRAM AKSES URL DENGAN PROXY OPSIONAL")
+    print("🌐 PROGRAM AKSES URL DENGAN SATU KLIK")
     print("="*50)
-    print(f"🔌 Proxy: {'Tidak menggunakan proxy' if not PROXY else PROXY}")
+    print(f"🔌 Proxy: {PROXY}")
     print(f"⏳ Delay load: {DELAY_AFTER_LOAD}s | Delay klik: {DELAY_AFTER_CLICK}s")
     
     request_count = 0
