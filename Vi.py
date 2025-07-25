@@ -9,11 +9,6 @@ from selenium.common.exceptions import WebDriverException, NoSuchElementExceptio
 from PIL import Image
 from io import BytesIO
 
-# Install required packages
-!pip install selenium pillow
-!apt-get update
-!apt install -y chromium-chromedriver
-
 # ========== KONFIGURASI ==========
 TARGET_URLS = [
     'https://www.profitableratecpm.com/yp5s785fv9?key=23fcee97edae2ea57212c118f18420bd',
